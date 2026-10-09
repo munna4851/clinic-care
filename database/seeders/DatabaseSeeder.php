@@ -10,12 +10,15 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Chamber Admin',
-            'email' => 'munnaict@yahoo.com',
-            'phone' => '01730335108', // ১১ ডিজিটের স্যাম্পল ফোন
-            'password' => Hash::make('aaaaaaaa'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'munnaict@yahoo.com'],
+            [
+                'name' => 'Chamber Admin',
+                'phone' => '01730335108',
+                'role' => 'admin',
+                'password' => Hash::make('aaaaaaaa'),
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
