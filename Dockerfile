@@ -26,17 +26,20 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Create SQLite database file
-RUN touch database/database.sqlite
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
-
 # Install PHP dependencies & build frontend assets
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
-# Run database migrations
-RUN php artisan migrate --force
+# Ensure database directory and sqlite file exist with permissions
+RUN mkdir -p /var/www/html/database && touch /var/www/html/database/database.sqlite
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 EXPOSE 80
+
+# Run migrations and start Apache on container launch
+CMD touch /var/www/html/database/database.sqlite && \
+    chown -R www-data:www-data /var/www/html/database && \
+    chmod -R 775 /var/www/html/database && \
+    php artisan migrate --force && \
+    apache2-foreground
