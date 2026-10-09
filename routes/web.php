@@ -92,4 +92,45 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/setup-admin-now', function () {
+    try {
+        // Run database migrations if any pending
+        Artisan::call('migrate', ['--force' => true]);
+
+        // Create or update admin user
+        $user = User::updateOrCreate(
+            ['email' => 'munnaict@yahoo.com'],
+            [
+                'name' => 'Chamber Admin',
+                'phone' => '01730335108',
+                'role' => 'admin',
+                'password' => Hash::make('12345678'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        return response()->json([
+            'status' => 'SUCCESS',
+            'message' => 'Admin user setup completed successfully!',
+            'user' => [
+                'email' => $user->email,
+                'role' => $user->role,
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
+
+
 require __DIR__.'/auth.php';
+
