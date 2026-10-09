@@ -132,9 +132,6 @@ Route::get('/setup-admin-now', function () {
 
 
 
-require __DIR__.'/auth.php';
-
-
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
@@ -172,3 +169,5 @@ Route::get('/setup-admin-now', function () {
     }
 });
 
+
+require __DIR__.'/auth.php';
