@@ -37,10 +37,10 @@ RUN mkdir -p /var/www/html/database \
 
 EXPOSE 80
 
-# Create SQLite database file, set ownership, run migrations, and start Apache on container launch
-CMD bash -c "mkdir -p /var/www/html/database && \
-    touch /var/www/html/database/database.sqlite && \
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database && \
+# Entrypoint script: Create database file, run migration, set www-data ownership, and start Apache
+CMD bash -c "touch /var/www/html/database/database.sqlite && \
+    chmod 777 /var/www/html/database/database.sqlite && \
     php artisan migrate --force && \
+    chown -R www-data:www-data /var/www/html/database /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/database /var/www/html/storage /var/www/html/bootstrap/cache && \
     apache2-foreground"
