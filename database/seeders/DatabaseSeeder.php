@@ -12,9 +12,9 @@ class DatabaseSeeder extends Seeder
     {
         User::create([
             'name' => 'Chamber Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'munnaict@yahoo.com',
             'phone' => '01730335108', // ১১ ডিজিটের স্যাম্পল ফোন
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make('aaaaaaaa'),
             'role' => 'admin',
         ]);
     }
