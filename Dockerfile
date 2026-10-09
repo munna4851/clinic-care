@@ -30,7 +30,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
-# Ensure database directory and permissions
+# Ensure database directory exists with Apache permissions
 RUN mkdir -p /var/www/html/database \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
