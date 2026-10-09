@@ -41,12 +41,10 @@ EXPOSE 80
 
 # Runtime: clear ALL caches → migrate+seed → apache
 CMD ["bash", "-c", "cd /var/www/html && \
-    mkdir -p database && touch database/database.sqlite && chmod 777 database/database.sqlite && \
-    php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan route:clear && \
-    php artisan view:clear && \
-    php artisan optimize:clear && \
+    mkdir -p database storage/framework/sessions storage/framework/views storage/framework/cache/data storage/logs bootstrap/cache && \
+    touch database/database.sqlite && \
+    chown -R www-data:www-data storage bootstrap/cache database && \
+    chmod -R 775 storage bootstrap/cache database && \
     php artisan migrate:fresh --force --seed && \
     chown -R www-data:www-data storage bootstrap/cache database && \
     chmod -R 775 storage bootstrap/cache database && \
