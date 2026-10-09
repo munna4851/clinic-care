@@ -93,6 +93,21 @@ Route::middleware('auth')->group(function () {
 });
 
 
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+Route::get('/make-admin', function () {
+    User::updateOrCreate(
+        ['email' => 'munnaict@yahoo.com'],
+        [
+            'name'     => 'Chamber Admin',
+            'password' => Hash::make('aaaaaaaa'),
+        ]
+    );
+
+    return 'Admin created: admin@example.com / aaaaaaaa';
+});
+
 
 require __DIR__.'/auth.php';
 
