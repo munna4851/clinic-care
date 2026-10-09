@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@media print {
+    /* পেজের বাকি এলিমেন্ট ও ব্যাকগ্রাউন্ড বাদ দেওয়ার জন্য */
+    body {
+        background-color: white !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* প্রিন্ট লেআউট অ্যাডজাস্টমেন্ট */
+    @page {
+        size: 80mm auto; /* থার্মাল পেপারের মাপ */
+        margin: 5mm;
+    }
+
+    /* প্রিন্ট বাটনের মতো `print:hidden` দেওয়া অংশগুলো লুকিয়ে রাখা */
+    .print\:hidden {
+        display: none !important;
+    }
+}
