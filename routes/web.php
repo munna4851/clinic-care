@@ -109,7 +109,7 @@ Route::get('/setup-admin-now', function () {
                 'name' => 'Chamber Admin',
                 'phone' => '01730335108',
                 'role' => 'admin',
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('aaaaaaaa'),
                 'email_verified_at' => now(),
             ]
         );
