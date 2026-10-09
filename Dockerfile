@@ -20,7 +20,7 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application code
+# Copy application code (bootstrap/cache, storage caches বাদ যাবে .dockerignore-এর কারণে)
 COPY . .
 
 # Set Apache document root to public
@@ -39,5 +39,15 @@ RUN mkdir -p database storage/framework/{sessions,views,cache} storage/logs boot
 
 EXPOSE 80
 
-# Runtime Execution: Create fresh DB schema, run migrations and seeders, then launch Apache
-CMD ["bash", "-c", "cd /var/www/html && touch database/database.sqlite && chmod 777 database/database.sqlite && php artisan config:clear && php artisan migrate:fresh --force --seed && chown -R www-data:www-data storage bootstrap/cache database && chmod -R 775 storage bootstrap/cache database && apache2-foreground"]
+# Runtime: clear ALL caches → migrate+seed → apache
+CMD ["bash", "-c", "cd /var/www/html && \
+    mkdir -p database && touch database/database.sqlite && chmod 777 database/database.sqlite && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan optimize:clear && \
+    php artisan migrate:fresh --force --seed && \
+    chown -R www-data:www-data storage bootstrap/cache database && \
+    chmod -R 775 storage bootstrap/cache database && \
+    apache2-foreground"]
