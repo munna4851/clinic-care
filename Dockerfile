@@ -39,5 +39,5 @@ RUN mkdir -p database storage/framework/{sessions,views,cache} storage/logs boot
 
 EXPOSE 80
 
-# Runtime Execution
-CMD ["bash", "-c", "cd /var/www/html && touch database/database.sqlite && chmod 777 database/database.sqlite && php artisan config:clear && php artisan migrate --force && chown -R www-data:www-data storage bootstrap/cache database && chmod -R 775 storage bootstrap/cache database && apache2-foreground"]
+# Runtime Execution: Create fresh DB schema, run migrations and seeders, then launch Apache
+CMD ["bash", "-c", "cd /var/www/html && touch database/database.sqlite && chmod 777 database/database.sqlite && php artisan config:clear && php artisan migrate:fresh --force --seed && chown -R www-data:www-data storage bootstrap/cache database && chmod -R 775 storage bootstrap/cache database && apache2-foreground"]
